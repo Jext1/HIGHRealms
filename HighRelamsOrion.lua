@@ -672,7 +672,7 @@ imageButton.Position = UDim2.new(1, -60, 0.5, -25) -- Position it on the right s
 
 imageButton.AnchorPoint = Vector2.new(0, 0.5) -- Adjust the anchor point to align properly
 
-imageButton.Image = "132019483251523" -- Set the image ID
+imageButton.Image = "rbxassetid://132019483251523" -- Set the correct image ID
 
 imageButton.BackgroundColor3 = Color3.new(250, 238, 105) -- Set the background color to black
 
