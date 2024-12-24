@@ -3,7 +3,19 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Jex
 local Window = OrionLib:MakeWindow({Name = "High Realms Xmas", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest", IntroEnabled = false})
 
 local Tab1 = Window:MakeTab({
-    Name = "Tp",
+    Name = "Xmas",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local Tab2 = Window:MakeTab({
+    Name = "Mob Farm",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local Tab3 = Window:MakeTab({
+    Name = "Credits",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
@@ -312,4 +324,123 @@ Tab1:AddButton({
             print("No Game Exit model found in the workspace.")
         end
     end    
+})
+
+-- Mobs selection logic
+local selectedMob = nil
+local teleporting = false
+
+-- This function handles teleportation to the selected mob
+local function teleportToSelectedMob(player, mobType)
+    local partName = ""
+
+    if mobType == "Slime" then
+        partName = "Slime_Body"
+    elseif mobType == "Gizmos" then
+        partName = "Gizmo.001"
+    elseif mobType == "Scatters" then
+        partName = "Scatter_L_Arm"
+    elseif mobType == "Muchers" then
+        partName = "Muncher_Head_New"
+    elseif mobType == "Flamelet" then
+        partName = "Flamelet_Body"
+    elseif mobType == "Spiders" then
+        partName = "Body_Spider_Small"  -- Adjust this if necessary
+    elseif mobType == "Grimthorn" then
+        partName = "Cube.001"  -- Adjust this if necessary
+    else
+        warn("No valid mob selected!")
+        return
+    end
+
+    local mobsFolder = game.Workspace:FindFirstChild("Mobs")
+    if not mobsFolder then
+        warn("Mobs folder not found in Workspace")
+        return
+    end
+
+    -- Function to find the closest mob
+    local function getClosestMob(player, partName)
+        local closestMob = nil
+        local shortestDistance = math.huge
+
+        for _, mob in pairs(mobsFolder:GetChildren()) do
+            if mob:IsA("Model") and mob:FindFirstChild(partName) then
+                local mobPart = mob[partName]
+                local distance = (player.Character.HumanoidRootPart.Position - mobPart.Position).Magnitude
+                if distance < shortestDistance then
+                    shortestDistance = distance
+                    closestMob = mob
+                end
+            end
+        end
+
+        return closestMob
+    end
+
+    -- Function to teleport the player to the closest mob
+    local function teleportToMob(player, partName)
+        while teleporting do
+            if not player or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+                warn("Player or their HumanoidRootPart not found")
+                wait(1)
+                continue
+            end
+
+            local closestMob = getClosestMob(player, partName)
+            if closestMob and closestMob:FindFirstChild(partName) then
+                local mobPart = closestMob[partName]
+                player.Character.HumanoidRootPart.CFrame = mobPart.CFrame * CFrame.new(0, 5, 0)  -- Offset to avoid overlapping
+                wait(0.5)
+            else
+                wait(0.5)
+            end
+        end
+    end
+
+    teleportToMob(player, partName)
+end
+
+-- Dropdown menu logic to select the mob type
+Tab2:AddDropdown({
+    Name = "Mobs",
+    Default = "Mobs",
+    Options = {"Slime", "Gizmos", "Scatters", "Muchers", "Flamelet", "Spiders", "Grimthorn"},
+    Callback = function(Value)
+        selectedMob = Value
+        print("Selected Mob: " .. selectedMob)
+    end    
+})
+
+-- Toggle logic to enable or disable teleporting
+Tab2:AddToggle({
+    Name = "Mob Farm",
+    Default = false,
+    Callback = function(Value)
+        teleporting = Value
+        if teleporting then
+            print("Teleporting to " .. selectedMob)
+            -- Start teleporting to the selected mob
+            local player = game.Players.LocalPlayer
+            teleportToSelectedMob(player, selectedMob)
+        else
+            print("Stopped teleporting.")
+        end
+    end    
+})
+
+Tab3:AddParagraph("Credits","ZhediH, Ai and Anya")
+
+Tab3:AddButton({
+	Name = "Youtube",
+	Callback = function()
+      		setclipboard("https://youtube.com/@zhedihacks?si=WBQ885-sWKFXq_9g")
+  	end    
+})
+
+Tab3:AddButton({
+	Name = "Discord",
+	Callback = function()
+      		setclipboard("Soon!")
+  	end    
 })
