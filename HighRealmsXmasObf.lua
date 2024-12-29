@@ -8,13 +8,13 @@ local Tab1 = Window:MakeTab({
     PremiumOnly = false
 })
 
-local Tab2 = Window:MakeTab({
+local TabMobs = Window:MakeTab({
     Name = "Mob Farm",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
 
-local Tab3 = Window:MakeTab({
+local TabCredits = Window:MakeTab({
     Name = "Credits",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
@@ -348,6 +348,8 @@ local function teleportToSelectedMob(player, mobType)
         partName = "Body_Spider_Small"  -- Adjust this if necessary
     elseif mobType == "Grimthorn" then
         partName = "Cube.001"  -- Adjust this if necessary
+    elseif mobType == "Archnella" then
+        partName = "LB_Leg_Spider"  -- Adjust this if necessary
     else
         warn("No valid mob selected!")
         return
@@ -402,10 +404,10 @@ local function teleportToSelectedMob(player, mobType)
 end
 
 -- Dropdown menu logic to select the mob type
-Tab2:AddDropdown({
+TabMobs:AddDropdown({
     Name = "Mobs",
     Default = "Mobs",
-    Options = {"Slime", "Gizmos", "Scatters", "Muchers", "Flamelet", "Spiders", "Grimthorn"},
+    Options = {"Slime", "Gizmos", "Scatters", "Muchers", "Flamelet", "Spiders", "Grimthorn", "Archnella"},
     Callback = function(Value)
         selectedMob = Value
         print("Selected Mob: " .. selectedMob)
@@ -413,7 +415,7 @@ Tab2:AddDropdown({
 })
 
 -- Toggle logic to enable or disable teleporting
-Tab2:AddToggle({
+TabMobs:AddToggle({
     Name = "Mob Farm",
     Default = false,
     Callback = function(Value)
@@ -429,16 +431,16 @@ Tab2:AddToggle({
     end    
 })
 
-Tab3:AddParagraph("Credits","ZhediH, Ai and Anya")
+TabCredits:AddParagraph("Credits","ZhediH, Ai and Anya")
 
-Tab3:AddButton({
+TabCredits:AddButton({
 	Name = "Youtube",
 	Callback = function()
       		setclipboard("https://youtube.com/@zhedihacks?si=WBQ885-sWKFXq_9g")
   	end    
 })
 
-Tab3:AddButton({
+TabCredits:AddButton({
 	Name = "Discord",
 	Callback = function()
       		setclipboard("Soon!")
