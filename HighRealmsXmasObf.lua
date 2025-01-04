@@ -443,6 +443,6 @@ TabCredits:AddButton({
 TabCredits:AddButton({
 	Name = "Discord",
 	Callback = function()
-      		setclipboard("Soon!")
+      		setclipboard("https://discord.gg/rMKXFXEGsU")
   	end    
 })
