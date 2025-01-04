@@ -108,7 +108,7 @@ if game.Players.LocalPlayer.Character then
 	setJumpHeight(game.Players.LocalPlayer.Character, jumpHeightValue)
 end
 
-TabHome:AddLabel("Default Jump Power Is 50")
+TabHome:AddLabel("Default Jump Power Is 8")
 
 -- Initialize the InfiniteJump variable
 local InfiniteJump = false
