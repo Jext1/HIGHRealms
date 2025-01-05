@@ -733,3 +733,10 @@ TabCredits:AddButton({
       		setclipboard("https://discord.gg/rMKXFXEGsU!")
   	end    
 })
+
+OrionLib:MakeNotification({
+	Name = "Join Our Discord!",
+	Content = "https://discord.gg/rMKXFXEGsU",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
