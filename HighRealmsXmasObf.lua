@@ -14,6 +14,12 @@ local TabMobs = Window:MakeTab({
     PremiumOnly = false
 })
 
+local TabItems = Window:MakeTab({
+    Name = "Items Farm",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
 local TabCredits = Window:MakeTab({
     Name = "Credits",
     Icon = "rbxassetid://4483345998",
@@ -219,6 +225,76 @@ TabMobs:AddToggle({
             teleportToSelectedMob(player, selectedMob)
         else
             print("Stopped teleporting.")
+        end
+    end    
+})
+
+-- Teleportation logic
+local teleporting = false
+
+-- This function handles teleportation to flowers and mushrooms
+local function teleportToFlowersAndMushrooms(player)
+    local islandFolder = game.Workspace:FindFirstChild("Island")
+    if not islandFolder then
+        warn("Island folder not found in Workspace")
+        return
+    end
+
+    -- Function to find the closest valid part
+    local function getClosestPart(player, partNames)
+        local closestPart = nil
+        local shortestDistance = math.huge
+
+        for _, model in pairs(islandFolder:GetChildren()) do
+            if model:IsA("Model") then
+                for _, partName in ipairs(partNames) do
+                    if model:FindFirstChild(partName) then
+                        local part = model[partName]
+                        local distance = (player.Character.HumanoidRootPart.Position - part.Position).Magnitude
+                        if distance < shortestDistance then
+                            shortestDistance = distance
+                            closestPart = part
+                        end
+                    end
+                end
+            end
+        end
+
+        return closestPart
+    end
+
+    -- Teleport the player to the closest part
+    while teleporting do
+        if not player or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+            warn("Player or their HumanoidRootPart not found")
+            wait(1)
+            continue
+        end
+
+        local partNames = {"Poppy", "Meshes/Flower_Poppy_Flower", "Spots"}
+        local closestPart = getClosestPart(player, partNames)
+        if closestPart then
+            player.Character.HumanoidRootPart.CFrame = closestPart.CFrame * CFrame.new(0, 5, 0) -- Offset to avoid overlapping
+            wait(0.5)
+        else
+            wait(0.5)
+        end
+    end
+end
+
+-- Toggle logic to enable or disable teleporting
+TabItems:AddToggle({
+    Name = "Flower Farm",
+    Default = false,
+    Callback = function(Value)
+        teleporting = Value
+        if teleporting then
+            print("Flower Farm enabled.")
+            -- Start teleporting to flowers and mushrooms
+            local player = game.Players.LocalPlayer
+            teleportToFlowersAndMushrooms(player)
+        else
+            print("Flower Farm disabled.")
         end
     end    
 })
