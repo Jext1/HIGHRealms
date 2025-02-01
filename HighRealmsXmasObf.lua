@@ -271,7 +271,7 @@ local function teleportToFlowersAndMushrooms(player)
             continue
         end
 
-        local partNames = {"Poppy", "Meshes/Flower_Poppy_Flower", "Spots"}
+        local partNames = {"Poppy", "Meshes/Flower_Poppy_Flower", "Spots", "Cherry_Blossom_Tree_Plant"}
         local closestPart = getClosestPart(player, partNames)
         if closestPart then
             player.Character.HumanoidRootPart.CFrame = closestPart.CFrame * CFrame.new(0, 5, 0) -- Offset to avoid overlapping
